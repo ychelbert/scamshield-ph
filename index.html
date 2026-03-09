@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#080b12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ScamShield PH">
+<meta name="description" content="I-report ang mga scammer at protektahan ang komunidad ng Pilipinas">
+<link rel="manifest" href="manifest.json">
+<title>ScamShield PH</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#080b12;
+  --bg2:#0e1220;
+  --card:#131929;
+  --card2:#1a2235;
+  --border:#1f2d45;
+  --red:#ff3d5a;
+  --red2:#ff6b7f;
+  --orange:#ff8c42;
+  --green:#22d9a0;
+  --blue:#3d9bff;
+  --yellow:#ffd166;
+  --text:#e8ecf5;
+  --muted:#5a6a85;
+  --muted2:#7a8aa5;
+  --head:'Barlow Condensed',sans-serif;
+  --body:'Barlow',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--body);
+  min-height:100vh;
+  padding-bottom:80px;
+  overflow-x:hidden;
+}
+
+/* BG texture */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(255,61,90,0.08),transparent),
+             radial-gradient(ellipse 40% 30% at 90% 80%,rgba(61,155,255,0.05),transparent);
+  pointer-events:none;z-index:0;
+}
+
+/* ── HEADER ── */
+.app-header{
+  background:rgba(8,11,18,0.95);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+}
+.app-logo{display:flex;align-items:center;gap:10px}
+.logo-icon{
+  width:36px;height:36px;
+  background:linear-gradient(135deg,var(--red),#c4003a);
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+  box-shadow:0 0 20px rgba(255,61,90,0.3);
+}
+.logo-name{font-family:var(--head);font-size:22px;font-weight:800;letter-spacing:0.5px}
+.logo-name span{color:var(--red)}
+.header-badge{
+  background:rgba(255,61,90,0.12);
+  border:1px solid rgba(255,61,90,0.25);
+  color:var(--red);
+  font-family:var(--head);
+  font-size:11px;font-weight:700;
+  letter-spacing:1.5px;
+  padding:4px 10px;border-radius:20px;
+}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(8,11,18,0.97);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex;
+  z-index:50;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.nav-btn{
+  flex:1;padding:12px 4px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  background:none;border:none;cursor:pointer;
+  color:var(--muted);font-family:var(--body);
+  font-size:10px;font-weight:600;
+  letter-spacing:0.5px;
+  transition:color 0.2s;
+}
+.nav-btn.active{color:var(--red)}
+.nav-btn .nav-icon{font-size:20px;transition:transform 0.2s}
+.nav-btn.active .nav-icon{transform:scale(1.15)}
+
+/* ── PAGES ── */
+.page{display:none;position:relative;z-index:1;padding:20px;animation:pageIn 0.3s ease}
+.page.active{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HERO ── */
+.hero{
+  background:linear-gradient(135deg,rgba(255,61,90,0.08),rgba(255,61,90,0.02));
+  border:1px solid rgba(255,61,90,0.15);
+  border-radius:20px;padding:28px 24px;margin-bottom:20px;
+  text-align:center;
+}
+.hero-emoji{font-size:48px;margin-bottom:12px;display:block;
+  animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.hero h1{font-family:var(--head);font-size:32px;font-weight:900;line-height:1;margin-bottom:8px}
+.hero h1 span{color:var(--red)}
+.hero p{color:var(--muted2);font-size:14px;line-height:1.6}
+
+/* ── STAT ROW ── */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:16px 12px;text-align:center;
+}
+.stat-num{font-family:var(--head);font-size:28px;font-weight:800;color:var(--red);line-height:1}
+.stat-label{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* ── SECTION TITLE ── */
+.sec-title{
+  font-family:var(--head);font-size:13px;font-weight:700;
+  color:var(--muted);letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:12px;display:flex;align-items:center;gap:8px;
+}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── SEARCH BOX ── */
+.search-wrap{margin-bottom:20px}
+.search-inner{
+  display:flex;gap:8px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;padding:8px;
+}
+.search-input{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--text);font-family:'Barlow Condensed',sans-serif;
+  font-size:20px;font-weight:600;padding:6px 8px;
+  letter-spacing:1px;
+}
+.search-input::placeholder{color:var(--muted);font-weight:400;font-size:16px}
+.search-btn{
+  background:var(--red);color:#fff;border:none;
+  border-radius:10px;padding:12px 20px;
+  font-family:var(--head);font-size:15px;font-weight:700;
+  cursor:pointer;letter-spacing:0.5px;
+  transition:opacity 0.2s,transform 0.15s;
+  white-space:nowrap;
+}
+.search-btn:active{transform:scale(0.97);opacity:0.85}
+
+/* ── RESULT ── */
+.result-box{display:none;margin-bottom:20px;animation:pageIn 0.3s ease}
+.result-box.show{display:block}
+
+.result-header{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px 16px 0 0;padding:20px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:none;
+}
+.result-num{font-family:var(--head);font-size:26px;font-weight:800;letter-spacing:1px}
+.risk-pill{
+  padding:6px 16px;border-radius:20px;
+  font-family:var(--head);font-size:13px;font-weight:700;letter-spacing:1px;
+}
+.risk-scam{background:rgba(255,61,90,0.15);color:var(--red);border:1px solid rgba(255,61,90,0.3)}
+.risk-spam{background:rgba(255,140,66,0.15);color:var(--orange);border:1px solid rgba(255,140,66,0.3)}
+.risk-safe{background:rgba(34,217,160,0.12);color:var(--green);border:1px solid rgba(34,217,160,0.25)}
+.risk-unknown{background:rgba(90,106,133,0.15);color:var(--muted2);border:1px solid var(--border)}
+
+.result-info{
+  background:var(--card2);
+  border:1px solid var(--border);border-top:none;border-bottom:none;
+  display:grid;grid-template-columns:1fr 1fr;
+}
+.info-cell{padding:14px 16px;border-right:1px solid var(--border)}
+.info-cell:nth-child(even){border-right:none}
+.info-cell:nth-child(3),.info-cell:nth-child(4){border-top:1px solid var(--border)}
+.info-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+.info-val{font-family:var(--head);font-size:17px;font-weight:700}
+
+.result-reports{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:0 0 16px 16px;border-top:none;padding:16px;
+}
+.report-item{
+  background:var(--bg2);border-radius:10px;padding:12px 14px;
+  margin-bottom:8px;border-left:3px solid var(--red);
+}
+.report-item.safe-report{border-left-color:var(--green)}
+.report-meta{font-size:11px;color:var(--muted);margin-bottom:4px;font-family:var(--head);letter-spacing:0.5px}
+.report-text{font-size:13px;line-height:1.5}
+.no-reports{text-align:center;color:var(--muted);font-size:13px;padding:16px 0}
+
+/* ── QUICK REPORT BUTTONS ── */
+.quick-report{margin-top:16px}
+.quick-label{font-size:12px;color:var(--muted2);margin-bottom:8px}
+.quick-btns{display:flex;gap:8px;flex-wrap:wrap}
+.qbtn{
+  padding:8px 14px;border-radius:8px;border:1px solid var(--border);
+  background:var(--card2);color:var(--text);
+  font-family:var(--head);font-size:13px;font-weight:600;
+  cursor:pointer;transition:all 0.2s;
+}
+.qbtn:active{transform:scale(0.95)}
+.qbtn.scam{border-color:rgba(255,61,90,0.4);color:var(--red)}
+.qbtn.spam{border-color:rgba(255,140,66,0.4);color:var(--orange)}
+.qbtn.safe{border-color:rgba(34,217,160,0.3);color:var(--green)}
+
+/* ── AGENCY CARDS ── */
+.agency-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.agency-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;
+}
+.agency-head{
+  padding:16px 18px;display:flex;align-items:center;gap:12px;
+  cursor:pointer;user-select:none;
+}
+.agency-logo{
+  width:44px;height:44px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.agency-info{flex:1}
+.agency-name{font-family:var(--head);font-size:18px;font-weight:800;letter-spacing:0.3px}
+.agency-desc{font-size:12px;color:var(--muted2);margin-top:2px}
+.agency-toggle{color:var(--muted);font-size:18px;transition:transform 0.3s}
+.agency-body{display:none;padding:0 18px 18px}
+.agency-body.open{display:block}
+.agency-toggle.open{transform:rotate(180deg)}
+
+.agency-field{margin-bottom:14px}
+.field-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px}
+.field-val{
+  background:var(--card2);border-radius:8px;
+  padding:10px 12px;font-size:13px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  border:1px solid var(--border);
+}
+.copy-btn{
+  background:none;border:none;color:var(--blue);
+  font-size:11px;font-family:var(--head);font-weight:700;
+  letter-spacing:1px;cursor:pointer;white-space:nowrap;
+}
+.action-btns{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.action-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px;border-radius:10px;
+  font-family:var(--head);font-size:15px;font-weight:700;letter-spacing:0.5px;
+  cursor:pointer;border:none;text-decoration:none;
+  transition:opacity 0.2s,transform 0.15s;
+}
+.action-btn:active{transform:scale(0.98);opacity:0.85}
+.btn-primary{background:var(--red);color:#fff}
+.btn-secondary{background:var(--card2);color:var(--text);border:1px solid var(--border)}
+.btn-green{background:rgba(34,217,160,0.1);color:var(--green);border:1px solid rgba(34,217,160,0.25)}
+.btn-blue{background:rgba(61,155,255,0.1);color:var(--blue);border:1px solid rgba(61,155,255,0.25)}
+
+/* ── REPORT FORM ── */
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px}
+.form-title{font-family:var(--head);font-size:22px;font-weight:800;margin-bottom:4px}
+.form-sub{font-size:13px;color:var(--muted2);margin-bottom:20px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px}
+.field input,.field select,.field textarea{
+  width:100%;background:var(--bg2);
+  border:1px solid var(--border);border-radius:10px;
+  padding:13px 14px;color:var(--text);
+  font-family:var(--body);font-size:14px;outline:none;
+  transition:border-color 0.2s;
+  -webkit-appearance:none;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red)}
+.field select option{background:var(--bg2)}
+.field textarea{resize:vertical;min-height:90px;line-height:1.5}
+.submit-btn{
+  width:100%;background:linear-gradient(135deg,var(--red),#c4003a);
+  color:#fff;border:none;border-radius:12px;
+  padding:16px;font-family:var(--head);font-size:18px;font-weight:800;
+  letter-spacing:0.5px;cursor:pointer;
+  box-shadow:0 4px 20px rgba(255,61,90,0.25);
+  transition:opacity 0.2s,transform 0.15s;
+}
+.submit-btn:active{transform:scale(0.98);opacity:0.85}
+
+/* ── DB PAGE ── */
+.filter-row{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.filter-row::-webkit-scrollbar{display:none}
+.filter-chip{
+  padding:7px 14px;border-radius:20px;
+  border:1px solid var(--border);background:var(--card);
+  color:var(--muted2);font-family:var(--head);font-size:13px;font-weight:600;
+  cursor:pointer;white-space:nowrap;transition:all 0.2s;flex-shrink:0;
+}
+.filter-chip.active{background:rgba(255,61,90,0.12);color:var(--red);border-color:rgba(255,61,90,0.3)}
+
+.db-item{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:16px;margin-bottom:10px;
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;transition:border-color 0.2s;
+}
+.db-item:active{border-color:var(--muted)}
+.db-icon{
+  width:44px;height:44px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.db-icon.scam{background:rgba(255,61,90,0.12)}
+.db-icon.spam{background:rgba(255,140,66,0.12)}
+.db-icon.safe{background:rgba(34,217,160,0.1)}
+.db-icon.unknown{background:rgba(90,106,133,0.12)}
+.db-info{flex:1;min-width:0}
+.db-num{font-family:var(--head);font-size:18px;font-weight:700;letter-spacing:0.5px}
+.db-detail{font-size:12px;color:var(--muted2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.db-count{font-size:11px;color:var(--muted);margin-top:4px}
+.db-badge{
+  padding:4px 10px;border-radius:10px;
+  font-family:var(--head);font-size:12px;font-weight:700;
+  flex-shrink:0;
+}
+
+/* ── LOADING ── */
+.loader{text-align:center;padding:40px 20px}
+.loader-ring{
+  width:48px;height:48px;border-radius:50%;
+  border:3px solid var(--border);
+  border-top-color:var(--red);
+  animation:spin 0.8s linear infinite;
+  margin:0 auto 16px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader p{font-size:13px;color:var(--muted)}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:10px;padding:12px 20px;
+  font-size:13px;font-weight:600;
+  opacity:0;transition:all 0.3s;z-index:100;
+  white-space:nowrap;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{border-color:rgba(34,217,160,0.3);color:var(--green)}
+.toast.error{border-color:rgba(255,61,90,0.3);color:var(--red)}
+.toast.info{border-color:rgba(61,155,255,0.3);color:var(--blue)}
+
+/* ── INSTALL BANNER ── */
+.install-banner{
+  background:linear-gradient(135deg,rgba(255,61,90,0.1),rgba(61,155,255,0.08));
+  border:1px solid rgba(255,61,90,0.2);
+  border-radius:14px;padding:14px 16px;margin-bottom:16px;
+  display:flex;align-items:center;gap:12px;
+}
+.install-banner p{font-size:13px;color:var(--muted2);flex:1;line-height:1.5}
+.install-banner strong{color:var(--text)}
+.install-btn{
+  background:var(--red);color:#fff;border:none;
+  border-radius:8px;padding:9px 14px;
+  font-family:var(--head);font-size:13px;font-weight:700;
+  cursor:pointer;white-space:nowrap;flex-shrink:0;
+}
+.close-banner{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px;flex-shrink:0}
+
+/* ── LETTER MODAL ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(8,11,18,0.92);backdrop-filter:blur(8px);
+  z-index:200;align-items:flex-end;
+}
+.modal-overlay.show{display:flex}
+.modal{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px 20px 0 0;padding:24px 20px;
+  width:100%;max-height:85vh;overflow-y:auto;
+  animation:slideUp 0.3s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.modal-title{font-family:var(--head);font-size:22px;font-weight:800}
+.modal-close{background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer;padding:4px}
+.letter-box{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:16px;
+  font-size:13px;line-height:1.8;color:var(--muted2);
+  margin-bottom:16px;white-space:pre-wrap;font-family:var(--body);
+}
+.letter-box strong{color:var(--text)}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* ── REGISTRATION SCREEN ── */
+#regScreen{
+  position:fixed;inset:0;z-index:999;
+  background:var(--bg);
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+  animation:pageIn 0.4s ease;
+}
+#regScreen.hidden{display:none}
+
+.reg-hero{
+  background:linear-gradient(160deg,rgba(255,61,90,0.12),rgba(61,155,255,0.05));
+  border-bottom:1px solid var(--border);
+  padding:40px 24px 32px;
+  text-align:center;
+}
+.reg-shield{font-size:56px;display:block;margin-bottom:14px;
+  animation:pulse 2s ease infinite}
+.reg-title{font-family:var(--head);font-size:34px;font-weight:900;line-height:1;margin-bottom:8px}
+.reg-title span{color:var(--red)}
+.reg-sub{color:var(--muted2);font-size:14px;line-height:1.6;max-width:320px;margin:0 auto}
+
+.reg-steps{
+  display:flex;justify-content:center;gap:6px;
+  padding:18px 24px 0;
+}
+.step-dot{
+  height:4px;border-radius:2px;
+  background:var(--border);flex:1;max-width:60px;
+  transition:background 0.3s;
+}
+.step-dot.active{background:var(--red)}
+.step-dot.done{background:rgba(255,61,90,0.4)}
+
+.reg-body{padding:24px;flex:1}
+
+.reg-step{display:none}
+.reg-step.active{display:block;animation:pageIn 0.3s ease}
+
+.reg-step-title{
+  font-family:var(--head);font-size:22px;font-weight:800;
+  margin-bottom:4px;
+}
+.reg-step-sub{font-size:13px;color:var(--muted2);margin-bottom:20px;line-height:1.5}
+
+.reg-field{margin-bottom:14px}
+.reg-field label{
+  display:block;font-size:11px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;
+}
+.reg-field input,.reg-field select{
+  width:100%;background:var(--card2);
+  border:1px solid var(--border);border-radius:10px;
+  padding:14px 14px;color:var(--text);
+  font-family:var(--body);font-size:15px;outline:none;
+  transition:border-color 0.2s;-webkit-appearance:none;
+}
+.reg-field input:focus,.reg-field select:focus{border-color:var(--red)}
+.reg-field select option{background:var(--bg2)}
+
+/* ID upload area */
+.id-upload-area{
+  background:var(--card2);border:2px dashed var(--border);
+  border-radius:14px;padding:28px 20px;
+  text-align:center;cursor:pointer;
+  transition:all 0.2s;position:relative;overflow:hidden;
+}
+.id-upload-area:hover,.id-upload-area.has-file{border-color:var(--red);background:rgba(255,61,90,0.04)}
+.id-upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:36px;margin-bottom:10px}
+.upload-text{font-family:var(--head);font-size:16px;font-weight:700;margin-bottom:4px}
+.upload-sub{font-size:12px;color:var(--muted2)}
+.upload-preview{
+  width:100%;max-height:160px;object-fit:cover;
+  border-radius:8px;margin-top:12px;display:none;
+  border:1px solid var(--border);
+}
+.upload-filename{
+  background:rgba(255,61,90,0.1);border:1px solid rgba(255,61,90,0.2);
+  border-radius:8px;padding:8px 12px;
+  font-size:12px;color:var(--red);margin-top:10px;display:none;
+  font-family:var(--head);font-weight:600;
+}
+
+.id-types{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;
+}
+.id-type-btn{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:10px;padding:12px 6px;text-align:center;
+  cursor:pointer;transition:all 0.2s;
+  font-size:11px;color:var(--muted2);font-weight:600;
+}
+.id-type-btn .id-emoji{font-size:20px;display:block;margin-bottom:4px}
+.id-type-btn.selected{
+  background:rgba(255,61,90,0.1);
+  border-color:rgba(255,61,90,0.4);color:var(--red);
+}
+
+/* Privacy note */
+.privacy-note{
+  background:rgba(61,155,255,0.06);
+  border:1px solid rgba(61,155,255,0.15);
+  border-radius:12px;padding:14px 16px;margin-bottom:20px;
+}
+.privacy-note p{font-size:12px;color:var(--muted2);line-height:1.6}
+.privacy-note strong{color:var(--text)}
+
+.reg-next-btn{
+  width:100%;
+  background:linear-gradient(135deg,var(--red),#c4003a);
+  color:#fff;border:none;border-radius:12px;
+  padding:16px;font-family:var(--head);font-size:18px;font-weight:800;
+  letter-spacing:0.5px;cursor:pointer;
+  box-shadow:0 4px 20px rgba(255,61,90,0.25);
+  transition:opacity 0.2s,transform 0.15s;margin-bottom:12px;
+}
+.reg-next-btn:active{transform:scale(0.98);opacity:0.85}
+.reg-back-btn{
+  width:100%;background:none;border:1px solid var(--border);
+  color:var(--muted2);border-radius:12px;
+  padding:13px;font-family:var(--head);font-size:15px;font-weight:700;
+  cursor:pointer;transition:border-color 0.2s;
+}
+.reg-back-btn:hover{border-color:var(--muted)}
+
+/* Success screen */
+.reg-success{display:none;text-align:center;padding:40px 24px}
+.reg-success.show{display:block;animation:pageIn 0.4s ease}
+.success-icon{font-size:72px;display:block;margin-bottom:20px;
+  animation:bounceIn 0.5s ease}
+@keyframes bounceIn{
+  0%{transform:scale(0.3)}60%{transform:scale(1.1)}100%{transform:scale(1)}
+}
+.success-title{font-family:var(--head);font-size:30px;font-weight:900;margin-bottom:8px}
+.success-sub{color:var(--muted2);font-size:14px;line-height:1.6;margin-bottom:28px}
+.user-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:18px;text-align:left;margin-bottom:24px;
+}
+.user-card-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.user-card-row:last-child{border-bottom:none}
+.user-card-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;width:70px;flex-shrink:0}
+.user-card-val{font-family:var(--head);font-size:15px;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- ═══ REGISTRATION SCREEN ═══ -->
+<div id="regScreen">
+  <div class="reg-hero">
+    <span class="reg-shield" style="display:flex;justify-content:center;margin-bottom:14px"><svg width="90" height="102" viewBox="0 0 60 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="shieldClipL">
+      <path d="M30 2L4 12V32C4 50 16 62 30 66C44 62 56 50 56 32V12L30 2Z"/>
+    </clipPath>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <path d="M30 2L4 12V32C4 50 16 62 30 66C44 62 56 50 56 32V12L30 2Z" fill="#0038A8"/>
+  <rect x="4" y="2" width="52" height="34" fill="white" clip-path="url(#shieldClipL)"/>
+  <path d="M30 2L4 12V36H30V2Z" fill="#0038A8" clip-path="url(#shieldClipL)"/>
+  <path d="M30 2L56 12V36H30V2Z" fill="#CE1126" clip-path="url(#shieldClipL)"/>
+  <path d="M4 36H30V66C16 62 4 50 4 36Z" fill="#FCD116" clip-path="url(#shieldClipL)"/>
+  <path d="M30 36H56C56 50 44 62 30 66V36Z" fill="#CE1126" clip-path="url(#shieldClipL)"/>
+  <circle cx="24" cy="34" r="9" fill="white" filter="url(#glow)"/>
+  <g stroke="white" stroke-width="2" stroke-linecap="round">
+    <line x1="24" y1="21" x2="24" y2="25"/>
+    <line x1="24" y1="43" x2="24" y2="47"/>
+    <line x1="11" y1="34" x2="15" y2="34"/>
+    <line x1="33" y1="34" x2="37" y2="34"/>
+    <line x1="14.8" y1="24.8" x2="17.7" y2="27.7"/>
+    <line x1="30.3" y1="40.3" x2="33.2" y2="43.2"/>
+    <line x1="33.2" y1="24.8" x2="30.3" y2="27.7"/>
+    <line x1="17.7" y1="40.3" x2="14.8" y2="43.2"/>
+  </g>
+  <circle cx="24" cy="34" r="5.5" fill="#FCD116"/>
+  <circle cx="24" cy="34" r="2.5" fill="white"/>
+  <text x="10" y="18" font-size="8" fill="#FCD116" text-anchor="middle" font-family="serif">★</text>
+  <text x="50" y="18" font-size="8" fill="#FCD116" text-anchor="middle" font-family="serif">★</text>
+  <text x="46" y="58" font-size="8" fill="white" text-anchor="middle" font-family="serif">★</text>
+  <path d="M30 2L4 12V32C4 50 16 62 30 66C44 62 56 50 56 32V12L30 2Z" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+</svg></span>
+    <div class="reg-title">SCAM<span>SHIELD</span> PH</div>
+    <div class="reg-sub">Para makapag-report at makapag-check ng mga scam number, kailangan mong mag-register muna.</div>
+  </div>
+  <div class="reg-steps">
+    <div class="step-dot active" id="dot1"></div>
+    <div class="step-dot" id="dot2"></div>
+    <div class="step-dot" id="dot3"></div>
+  </div>
+  <div class="reg-body">
+    <!-- STEP 1 -->
+    <div class="reg-step active" id="step1">
+      <div class="reg-step-title">👤 Personal na Impormasyon</div>
+      <div class="reg-step-sub">Ilagay ang iyong pangalan at contact number. Para sa accountability ng mga report.</div>
+      <div class="reg-field"><label>Buong Pangalan</label><input type="text" id="regName" placeholder="Juan dela Cruz" autocomplete="name"></div>
+      <div class="reg-field"><label>Contact Number</label><input type="tel" id="regPhone" placeholder="09XX XXX XXXX" maxlength="15"></div>
+      <div class="reg-field"><label>Email Address (opsyonal)</label><input type="email" id="regEmail" placeholder="juan@email.com"></div>
+      <div class="privacy-note"><p>🔒 <strong>Privacy Notice:</strong> Ang iyong impormasyon ay <strong>hindi ibabahagi</strong> sa sinuman. Protektado ito ng <strong>Data Privacy Act of 2012 (RA 10173)</strong>. Locally stored lamang sa iyong device.</p></div>
+      <button class="reg-next-btn" onclick="regStep1()">SUSUNOD ➤</button>
+    </div>
+    <!-- STEP 2 -->
+    <div class="reg-step" id="step2">
+      <div class="reg-step-title">🪪 Pumili ng Valid ID</div>
+      <div class="reg-step-sub">Piliin ang uri ng ID na iyong isu-submit. Isa lang ang kailangan.</div>
+      <div class="id-types">
+        <div class="id-type-btn" onclick="selectID(this,'PhilSys / National ID')"><span class="id-emoji">🪪</span>PhilSys ID</div>
+        <div class="id-type-btn" onclick="selectID(this,'Passport')"><span class="id-emoji">📘</span>Passport</div>
+        <div class="id-type-btn" onclick="selectID(this,'Driver\'s License')"><span class="id-emoji">🚗</span>Driver's</div>
+        <div class="id-type-btn" onclick="selectID(this,'SSS / GSIS')"><span class="id-emoji">🏛️</span>SSS/GSIS</div>
+        <div class="id-type-btn" onclick="selectID(this,'PhilHealth')"><span class="id-emoji">❤️</span>PhilHealth</div>
+        <div class="id-type-btn" onclick="selectID(this,'Voter\'s ID')"><span class="id-emoji">🗳️</span>Voter's ID</div>
+        <div class="id-type-btn" onclick="selectID(this,'Postal ID')"><span class="id-emoji">📬</span>Postal ID</div>
+        <div class="id-type-btn" onclick="selectID(this,'PRC ID')"><span class="id-emoji">🎓</span>PRC ID</div>
+        <div class="id-type-btn" onclick="selectID(this,'Barangay ID')"><span class="id-emoji">🏘️</span>Brgy ID</div>
+      </div>
+      <div class="reg-field" style="margin-bottom:8px"><label>Napiling ID: <span id="selectedIDLabel" style="color:var(--red)">Wala pang napili</span></label></div>
+      <div class="privacy-note"><p>🔒 Ang iyong ID ay <strong>locally stored lamang</strong> sa iyong device. Hindi ito ini-upload sa anumang server. Pwede mong i-blur ang ID number sa larawan bago i-upload.</p></div>
+      <button class="reg-next-btn" onclick="regStep2()">SUSUNOD ➤</button>
+      <button class="reg-back-btn" onclick="goRegStep(1)">◀ Bumalik</button>
+    </div>
+    <!-- STEP 3 -->
+    <div class="reg-step" id="step3">
+      <div class="reg-step-title">📸 I-Upload ang ID</div>
+      <div class="reg-step-sub">I-upload ang larawan ng iyong <span id="step3IDType" style="color:var(--red);font-weight:700">Valid ID</span>.</div>
+      <div class="id-upload-area" id="uploadArea">
+        <input type="file" id="idFile" accept="image/*" onchange="previewID(event)">
+        <div id="uploadInner">
+          <div class="upload-icon">📷</div>
+          <div class="upload-text">Pindutin para mag-upload</div>
+          <div class="upload-sub">Kunan ng camera o piliin sa gallery<br>JPG, PNG — max 5MB</div>
+        </div>
+        <img class="upload-preview" id="uploadPreview" alt="ID Preview">
+        <div class="upload-filename" id="uploadFilename"></div>
+      </div>
+      <div class="privacy-note" style="margin-top:14px"><p>💡 <strong>Tip:</strong> Pwede mong i-blur o itago ang iyong ID number. Ang pangalan at litrato lang ang kailangan. <strong>Hindi ito ino-online — device mo lang ang nakaalam.</strong></p></div>
+      <button class="reg-next-btn" onclick="regStep3()">KUMPLETO NA — PUMASOK ➤</button>
+      <button class="reg-back-btn" onclick="goRegStep(2)">◀ Bumalik</button>
+    </div>
+    <!-- SUCCESS -->
+    <div class="reg-success" id="regSuccess">
+      <span class="success-icon">✅</span>
+      <div class="success-title">Naka-register ka na!</div>
+      <div class="success-sub">Maligayang pagdating sa ScamShield PH.<br>Sama-sama nating protektahan ang komunidad!</div>
+      <div class="user-card" id="userSummary"></div>
+      <button class="reg-next-btn" onclick="enterApp()">PUMASOK SA APP 🛡️</button>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="app-header">
+  <div class="app-logo">
+    <div class="logo-icon" style="background:transparent;box-shadow:none;padding:0"><svg width="28" height="32" viewBox="0 0 60 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="shieldClipS">
+      <path d="M30 2L4 12V32C4 50 16 62 30 66C44 62 56 50 56 32V12L30 2Z"/>
+    </clipPath>
+  </defs>
+  <!-- Shield outline fill base -->
+  <path d="M30 2L4 12V32C4 50 16 62 30 66C44 62 56 50 56 32V12L30 2Z" fill="#0038A8"/>
+  <!-- Top half white background -->
+  <rect x="4" y="2" width="52" height="34" fill="white" clip-path="url(#shieldClipS)"/>
+  <!-- Top-left: BLUE -->
+  <path d="M30 2L4 12V36H30V2Z" fill="#0038A8" clip-path="url(#shieldClipS)"/>
+  <!-- Top-right: RED -->
+  <path d="M30 2L56 12V36H30V2Z" fill="#CE1126" clip-path="url(#shieldClipS)"/>
+  <!-- Bottom-left: YELLOW -->
+  <path d="M4 36H30V66C16 62 4 50 4 36Z" fill="#FCD116" clip-path="url(#shieldClipS)"/>
+  <!-- Bottom-right: RED -->
+  <path d="M30 36H56C56 50 44 62 30 66V36Z" fill="#CE1126" clip-path="url(#shieldClipS)"/>
+  <!-- White sun -->
+  <circle cx="24" cy="34" r="9" fill="white"/>
+  <!-- 8 sun rays -->
+  <g stroke="white" stroke-width="2" stroke-linecap="round">
+    <line x1="24" y1="21" x2="24" y2="25"/>
+    <line x1="24" y1="43" x2="24" y2="47"/>
+    <line x1="11" y1="34" x2="15" y2="34"/>
+    <line x1="33" y1="34" x2="37" y2="34"/>
+    <line x1="14.8" y1="24.8" x2="17.7" y2="27.7"/>
+    <line x1="30.3" y1="40.3" x2="33.2" y2="43.2"/>
+    <line x1="33.2" y1="24.8" x2="30.3" y2="27.7"/>
+    <line x1="17.7" y1="40.3" x2="14.8" y2="43.2"/>
+  </g>
+  <!-- Sun inner gold circle -->
+  <circle cx="24" cy="34" r="5.5" fill="#FCD116"/>
+  <!-- Sun center white dot -->
+  <circle cx="24" cy="34" r="2.5" fill="white"/>
+  <!-- 3 Stars: top-left, top-right, bottom-center -->
+  <!-- Top-left star (on blue) -->
+  <text x="10" y="18" font-size="8" fill="#FCD116" text-anchor="middle" font-family="serif">★</text>
+  <!-- Top-right star (on red) -->
+  <text x="50" y="18" font-size="8" fill="#FCD116" text-anchor="middle" font-family="serif">★</text>
+  <!-- Bottom star (on yellow/red border) -->
+  <text x="46" y="58" font-size="8" fill="white" text-anchor="middle" font-family="serif">★</text>
+  <!-- Shield border -->
+  <path d="M30 2L4 12V32C4 50 16 62 30 66C44 62 56 50 56 32V12L30 2Z" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+</svg></div>
+    <div class="logo-name">Scam<span>Shield</span> PH</div>
+  </div>
+  <div class="header-badge">BETA</div>
+</header>
+
+<!-- Pages -->
+
+<!-- ═══ HOME PAGE ═══ -->
+<div class="page active" id="page-home">
+
+  <div id="installBanner" class="install-banner" style="display:none">
+    <span style="font-size:24px">📲</span>
+    <p><strong>I-install ang app!</strong><br>I-add sa iyong home screen para gamitin kahit offline.</p>
+    <button class="install-btn" onclick="triggerInstall()">I-install</button>
+    <button class="close-banner" onclick="hideBanner()">✕</button>
+  </div>
+
+  <div class="hero">
+    <span class="hero-emoji" style="display:flex;justify-content:center;margin-bottom:12px"><svg width="72" height="82" viewBox="0 0 60 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="shieldClipM">
+      <path d="M30 2L4 12V32C4 50 16 62 30 66C44 62 56 50 56 32V12L30 2Z"/>
+    </clipPath>
+  </defs>
+  <path d="M30 2L4 12V32C4 50 16 62 30 66C44 62 56 50 56 32V12L30 2Z" fill="#0038A8"/>
+  <rect x="4" y="2" width="52" height="34" fill="white" clip-path="url(#shieldClipM)"/>
+  <path d="M30 2L4 12V36H30V2Z" fill="#0038A8" clip-path="url(#shieldClipM)"/>
+  <path d="M30 2L56 12V36H30V2Z" fill="#CE1126" clip-path="url(#shieldClipM)"/>
+  <path d="M4 36H30V66C16 62 4 50 4 36Z" fill="#FCD116" clip-path="url(#shieldClipM)"/>
+  <path d="M30 36H56C56 50 44 62 30 66V36Z" fill="#CE1126" clip-path="url(#shieldClipM)"/>
+  <circle cx="24" cy="34" r="9" fill="white"/>
+  <g stroke="white" stroke-width="2" stroke-linecap="round">
+    <line x1="24" y1="21" x2="24" y2="25"/>
+    <line x1="24" y1="43" x2="24" y2="47"/>
+    <line x1="11" y1="34" x2="15" y2="34"/>
+    <line x1="33" y1="34" x2="37" y2="34"/>
+    <line x1="14.8" y1="24.8" x2="17.7" y2="27.7"/>
+    <line x1="30.3" y1="40.3" x2="33.2" y2="43.2"/>
+    <line x1="33.2" y1="24.8" x2="30.3" y2="27.7"/>
+    <line x1="17.7" y1="40.3" x2="14.8" y2="43.2"/>
+  </g>
+  <circle cx="24" cy="34" r="5.5" fill="#FCD116"/>
+  <circle cx="24" cy="34" r="2.5" fill="white"/>
+  <text x="10" y="18" font-size="8" fill="#FCD116" text-anchor="middle" font-family="serif">★</text>
+  <text x="50" y="18" font-size="8" fill="#FCD116" text-anchor="middle" font-family="serif">★</text>
+  <text x="46" y="58" font-size="8" fill="white" text-anchor="middle" font-family="serif">★</text>
+  <path d="M30 2L4 12V32C4 50 16 62 30 66C44 62 56 50 56 32V12L30 2Z" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+</svg></span>
+    <h1>PROTEKTAHAN<br>ANG <span>PILIPINAS</span></h1>
+    <p>I-report ang mga scammer at i-check kung ang isang numero ay ligtas o hindi bago sagutin.</p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-num" id="statTotal">0</div>
+      <div class="stat-label">Mga Report</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statScam">0</div>
+      <div class="stat-label">Mga Scam</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statSafe">0</div>
+      <div class="stat-label">Ligtas</div>
+    </div>
+  </div>
+
+  <div class="sec-title">🔍 I-Check ang Numero</div>
+  <div class="search-wrap">
+    <div class="search-inner">
+      <input class="search-input" id="homeSearch" type="tel" placeholder="09XX XXX XXXX" maxlength="15">
+      <button class="search-btn" onclick="doSearch()">CHECK</button>
+    </div>
+  </div>
+
+  <div class="result-box" id="homeResult">
+    <div class="result-header">
+      <div class="result-num" id="resNum"></div>
+      <div class="risk-pill" id="resPill"></div>
+    </div>
+    <div class="result-info" id="resInfo"></div>
+    <div class="result-reports" id="resReports">
+      <div class="sec-title" style="margin-bottom:12px">📋 Mga Report</div>
+      <div id="resList"></div>
+      <div class="quick-report">
+        <div class="quick-label">Mayroon kang nalalaman tungkol sa numerong ito?</div>
+        <div class="quick-btns">
+          <button class="qbtn scam" onclick="quickReport('scam')">🚨 Scam</button>
+          <button class="qbtn spam" onclick="quickReport('spam')">📢 Spam</button>
+          <button class="qbtn" onclick="quickReport('harassment')">😡 Panggugulo</button>
+          <button class="qbtn safe" onclick="quickReport('safe')">✅ Ligtas</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="homeLoader" class="loader" style="display:none">
+    <div class="loader-ring"></div>
+    <p>Hinahanap sa database...</p>
+  </div>
+
+  <div class="sec-title">⚡ Pinakabagong Scam Reports</div>
+  <div id="recentList"></div>
+</div>
+
+<!-- ═══ REPORT PAGE ═══ -->
+<div class="page" id="page-report">
+  <div class="form-card">
+    <div class="form-title">🚨 Mag-Report ng Numero</div>
+    <div class="form-sub">Tulungan ang komunidad — i-report ang mga scammer, spammer, at manggugulo.</div>
+
+    <div class="field">
+      <label>📞 Phone Number</label>
+      <input type="tel" id="rNum" placeholder="09XX XXX XXXX" maxlength="15">
+    </div>
+    <div class="field">
+      <label>📂 Kategorya</label>
+      <select id="rType">
+        <option value="">— Pumili ng kategorya —</option>
+        <option value="scam">🚨 Scam / Fraud</option>
+        <option value="spam">📢 Spam / Reklamo</option>
+        <option value="harassment">😡 Panggugulo / Banta</option>
+        <option value="impersonation">🎭 Nagpapanggap (GCash, BDO, atbp.)</option>
+        <option value="investment">💸 Fake Investment</option>
+        <option value="safe">✅ Ligtas / Legit na Negosyo</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>🏙️ Lugar (opsyonal)</label>
+      <input type="text" id="rRegion" placeholder="Hal. NCR, Cebu, Davao...">
+    </div>
+    <div class="field">
+      <label>📝 Kwento / Detalye</label>
+      <textarea id="rDesc" placeholder="Ano ang nangyari? Ano ang sinabi nila? Makakatulong ito sa iba..."></textarea>
+    </div>
+    <button class="submit-btn" onclick="submitReport()">I-SUBMIT ANG REPORT ➤</button>
+  </div>
+
+  <div class="form-card" style="background:rgba(255,61,90,0.04)">
+    <div class="form-title" style="font-size:18px">⚠️ Tandaan</div>
+    <p style="font-size:13px;color:var(--muted2);line-height:1.7;margin-top:8px">
+      Ang lahat ng report ay <strong style="color:var(--text)">anonymous</strong> at ginagamit para sa community awareness lamang. 
+      Hindi nito inilalabas ang personal na datos ng sinuman. 
+      Para sa legal na aksyon, makipag-ugnayan sa <strong style="color:var(--red)">NTC</strong> o <strong style="color:var(--red)">PNP-ACG</strong>.
+    </p>
+  </div>
+</div>
+
+<!-- ═══ AGENCIES PAGE ═══ -->
+<div class="page" id="page-agencies">
+  <div class="sec-title" style="margin-bottom:16px">🏛️ Opisyal na Reklamo</div>
+
+  <div class="agency-grid" id="agencyGrid"></div>
+</div>
+
+<!-- ═══ DATABASE PAGE ═══ -->
+<div class="page" id="page-db">
+  <div class="sec-title" style="margin-bottom:12px">🗃️ Community Database</div>
+
+  <div class="filter-row">
+    <button class="filter-chip active" onclick="filterDB('all',this)">Lahat</button>
+    <button class="filter-chip" onclick="filterDB('scam',this)">🚨 Scam</button>
+    <button class="filter-chip" onclick="filterDB('spam',this)">📢 Spam</button>
+    <button class="filter-chip" onclick="filterDB('harassment',this)">😡 Panggugulo</button>
+    <button class="filter-chip" onclick="filterDB('safe',this)">✅ Ligtas</button>
+  </div>
+
+  <div id="dbList"></div>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="goPage('home',this)">
+    <span class="nav-icon">🏠</span>Home
+  </button>
+  <button class="nav-btn" onclick="goPage('report',this)">
+    <span class="nav-icon">🚨</span>I-Report
+  </button>
+  <button class="nav-btn" onclick="goPage('agencies',this)">
+    <span class="nav-icon">🏛️</span>Ahensya
+  </button>
+  <button class="nav-btn" onclick="goPage('db',this)">
+    <span class="nav-icon">🗃️</span>Database
+  </button>
+</nav>
+
+<!-- Letter Modal -->
+<div class="modal-overlay" id="letterModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Complaint Letter</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="letter-box" id="letterContent"></div>
+    <div class="action-btns">
+      <button class="action-btn btn-primary" onclick="copyLetter()">📋 I-Copy ang Letter</button>
+      <button class="action-btn btn-secondary" onclick="closeModal()">Isara</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════
+const STORAGE_KEY = 'scamshield_reports_v2';
+
+const seedData = [
+  { num:'09171234567', carrier:'Globe', type:'scam', region:'NCR', desc:'Nag-text na nanalo daw ng GCash prize worth ₱50,000. Huwag paniwalaan!', date:'2025-11-03', votes:18 },
+  { num:'09991234567', carrier:'Smart', type:'spam', region:'Cebu', desc:'Paulit-ulit na nag-tetext ng loan advertisement kahit hindi nag-apply.', date:'2025-12-01', votes:7 },
+  { num:'09561237788', carrier:'DITO', type:'scam', region:'Davao', desc:'Tumawag at nagpanggap na BDO agent. Humingi ng OTP at account number.', date:'2025-11-22', votes:24 },
+  { num:'09289995544', carrier:'Sun', type:'harassment', region:'Cavite', desc:'Nagpapadala ng banta sa text. Lumabas na sa police station.', date:'2025-10-15', votes:11 },
+  { num:'028888888',   carrier:'PLDT', type:'safe', region:'NCR', desc:'Legit na customer service ng isang bangko. Ayos lang.', date:'2025-09-10', votes:31 },
+  { num:'09178887766', carrier:'Globe', type:'investment', region:'Laguna', desc:'Nag-alok ng "sure" na investment na 300% ROI in 30 days. Classic pyramiding.', date:'2025-12-10', votes:15 },
+  { num:'09958885566', carrier:'Smart', type:'impersonation', region:'Batangas', desc:'Nagpanggap na NBI agent at nagbabanta ng arestuhan kung hindi magbabayad.', date:'2025-11-30', votes:20 },
+];
+
+function getDB() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [...seedData];
+    const saved = JSON.parse(raw);
+    const seedNums = seedData.map(s => s.num);
+    const userReports = saved.filter(r => !seedNums.includes(r.num));
+    return [...seedData, ...userReports];
+  } catch { return [...seedData]; }
+}
+
+function saveDB(data) {
+  try {
+    const seedNums = seedData.map(s => s.num);
+    const userOnly = data.filter(r => !seedNums.includes(r.num));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(userOnly));
+  } catch(e) { console.warn('Storage not available:', e); }
+}
+
+// ═══════════════════════════════════════════════════════
+// CARRIER DETECTION
+// ═══════════════════════════════════════════════════════
+function detectCarrier(n) {
+  const c = n.replace(/\D/g,'');
+  const l = c.startsWith('63') ? '0'+c.slice(2) : c;
+  const p = l.slice(0,4);
+  const m = {
+    Globe:['0917','0926','0927','0935','0936','0937','0945','0955','0956','0966','0967','0977','0978','0997','0907','0947'],
+    Smart:['0908','0918','0919','0920','0921','0928','0929','0939','0946','0948','0949','0950','0951','0961','0998','0999'],
+    Sun:['0922','0923','0932','0933','0934','0942','0943'],
+    DITO:['0895','0896','0897','0898','0991','0992','0993','0994'],
+    TNT:['0909','0910','0911','0912','0930','0938','0946'],
+  };
+  for(const[k,v] of Object.entries(m)) if(v.includes(p)) return k;
+  if(l.startsWith('02')||l.startsWith('03')||l.startsWith('04')||l.startsWith('05')||l.startsWith('07')||l.startsWith('08')) return 'Landline (PLDT/Converge)';
+  return 'Hindi natukoy';
+}
+
+function normalize(n) {
+  let s = n.replace(/[\s\-]/g,'');
+  if(s.startsWith('+63')) s = '0'+s.slice(3);
+  if(s.startsWith('63')&&s.length===12) s = '0'+s.slice(2);
+  return s;
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function goPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id==='db') renderDB('all');
+  if(id==='agencies') renderAgencies();
+  if(id==='home') updateStats();
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════════════════
+// SEARCH / CHECK
+// ═══════════════════════════════════════════════════════
+let currentSearchNum = '';
+
+function doSearch() {
+  const raw = document.getElementById('homeSearch').value.trim();
+  if(!raw){ toast('⚠️ Ilagay ang numero', 'error'); return; }
+  const num = normalize(raw);
+  if(num.length < 7){ toast('⚠️ Invalid na numero', 'error'); return; }
+  currentSearchNum = num;
+
+  document.getElementById('homeResult').classList.remove('show');
+  document.getElementById('homeLoader').style.display = 'block';
+
+  const steps = ['Sinisiyasat ang numero...','Hinahanap sa database...','Tinitingnan ang mga report...'];
+  let i=0;
+  const iv = setInterval(()=>{ 
+    document.querySelector('#homeLoader p').textContent = steps[i%steps.length]; 
+    i++; 
+  }, 600);
+
+  setTimeout(()=>{
+    clearInterval(iv);
+    document.getElementById('homeLoader').style.display = 'none';
+    showResult(num);
+  }, 1800);
+}
+
+function showResult(num) {
+  const db = getDB();
+  const entries = db.filter(r => r.num === num);
+
+  const riskMap = {scam:'🚨 SCAM',spam:'📢 SPAM',harassment:'😡 PANGGUGULO',impersonation:'🎭 PANLOLOKO',investment:'💸 FAKE INVEST',safe:'✅ LIGTAS',unknown:'❓ HINDI ALAM'};
+  const pillMap = {scam:'risk-scam',spam:'risk-spam',harassment:'risk-scam',impersonation:'risk-scam',investment:'risk-scam',safe:'risk-safe',unknown:'risk-unknown'};
+
+  let risk = 'unknown';
+  if(entries.length > 0) {
+    const counts = {};
+    entries.forEach(e => { counts[e.type] = (counts[e.type]||0)+1; });
+    const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    risk = sorted[0][0];
+  }
+
+  const carrier = entries[0]?.carrier || detectCarrier(num);
+  const region = entries[0]?.region || '—';
+  const numType = num.startsWith('02')||num.startsWith('03') ? 'Landline' : 'Mobile';
+
+  document.getElementById('resNum').textContent = num;
+  const pill = document.getElementById('resPill');
+  pill.textContent = riskMap[risk]||'❓ HINDI ALAM';
+  pill.className = 'risk-pill '+(pillMap[risk]||'risk-unknown');
+
+  document.getElementById('resInfo').innerHTML = `
+    <div class="info-cell"><div class="info-label">Carrier</div><div class="info-val">${carrier}</div></div>
+    <div class="info-cell"><div class="info-label">Uri</div><div class="info-val">${numType}</div></div>
+    <div class="info-cell"><div class="info-label">Rehiyon</div><div class="info-val">${region}</div></div>
+    <div class="info-cell"><div class="info-label">Reports</div><div class="info-val">${entries.length}</div></div>
+  `;
+
+  const list = document.getElementById('resList');
+  if(entries.length === 0) {
+    list.innerHTML = '<div class="no-reports">Walang report para sa numerong ito.<br>Ikaw ba ay nakatanggap? I-report mo!</div>';
+  } else {
+    list.innerHTML = entries.slice(0,5).map(e=>`
+      <div class="report-item ${e.type==='safe'?'safe-report':''}">
+        <div class="report-meta">${(riskMap[e.type]||e.type).toUpperCase()} · ${e.date} · 👍 ${e.votes} nakatulong</div>
+        <div class="report-text">${e.desc}</div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('homeResult').classList.add('show');
+}
+
+function quickReport(type) {
+  if(!currentSearchNum){ toast('Mag-search muna ng numero', 'error'); return; }
+  addReport(currentSearchNum, type, '', '', detectCarrier(currentSearchNum));
+  toast('✅ Na-report! Salamat sa tulong!', 'success');
+  showResult(currentSearchNum);
+}
+
+// ═══════════════════════════════════════════════════════
+// SUBMIT REPORT
+// ═══════════════════════════════════════════════════════
+function submitReport() {
+  const num = normalize(document.getElementById('rNum').value.trim());
+  const type = document.getElementById('rType').value;
+  const region = document.getElementById('rRegion').value.trim();
+  const desc = document.getElementById('rDesc').value.trim();
+
+  if(!num||num.length<7){ toast('⚠️ Ilagay ang tamang numero', 'error'); return; }
+  if(!type){ toast('⚠️ Pumili ng kategorya', 'error'); return; }
+  if(!desc){ toast('⚠️ Magdagdag ng detalye', 'error'); return; }
+
+  addReport(num, type, desc, region, detectCarrier(num));
+
+  document.getElementById('rNum').value = '';
+  document.getElementById('rType').value = '';
+  document.getElementById('rRegion').value = '';
+  document.getElementById('rDesc').value = '';
+
+  toast('✅ Na-submit! Salamat sa pag-ulat!', 'success');
+  updateStats();
+
+  setTimeout(()=>{ 
+    document.getElementById('homeSearch').value = num;
+    goPage('home', document.querySelector('.nav-btn'));
+    doSearch();
+  }, 1000);
+}
+
+function addReport(num, type, desc, region, carrier) {
+  const db = getDB();
+  const today = new Date().toISOString().split('T')[0];
+  db.push({ num, carrier: carrier||detectCarrier(num), type, region: region||'—', desc: desc||`Iniulat bilang ${type}.`, date: today, votes: 1 });
+  saveDB(db);
+}
+
+// ═══════════════════════════════════════════════════════
+// AGENCIES
+// ═══════════════════════════════════════════════════════
+const AGENCIES = [
+  {
+    id:'ntc', name:'NTC', full:'National Telecommunications Commission',
+    color:'#3d9bff', emoji:'📡',
+    bg:'rgba(61,155,255,0.1)',
+    contact:'1682',
+    email:'complaints@ntc.gov.ph',
+    url:'https://ntc.gov.ph',
+    reportUrl:'https://ntc.gov.ph/complaints/',
+    desc:'Para sa spam texts, scam calls, at abuso ng telco.',
+    letter:(num,type,desc)=>`Petsa: ${new Date().toLocaleDateString('tl-PH')}
+
+Sa Kagalang-galang na Opisina ng NTC,
+
+Ako po ay nakatanggap ng ${type} mula sa numerong ${num}.
+
+DETALYE NG REKLAMO:
+Numero: ${num}
+Uri ng Paglabag: ${type}
+Carrier: ${detectCarrier(num)}
+
+Pangyayari:
+${desc}
+
+Humihiling po ako ng agarang aksyon laban sa numerong ito alinsunod sa RA 10175 (Cybercrime Prevention Act) at Republic Act 8792.
+
+Taos-pusong nagpapasalamat,
+[Inyong Pangalan]
+[Contact Number]
+[Email Address]`
+  },
+  {
+    id:'pnp', name:'PNP-ACG', full:'Anti-Cybercrime Group',
+    color:'#ff3d5a', emoji:'👮',
+    bg:'rgba(255,61,90,0.1)',
+    contact:'(02) 8723-0401',
+    email:'acg@pnp.gov.ph',
+    url:'https://acg.pnp.gov.ph',
+    reportUrl:'https://acg.pnp.gov.ph/index.php/report-a-cybercrime',
+    desc:'Para sa cybercrime, scam, at online fraud.',
+    letter:(num,type,desc)=>`Petsa: ${new Date().toLocaleDateString('tl-PH')}
+
+PNP Anti-Cybercrime Group
+Camp Crame, Quezon City
+
+CYBERCRIME INCIDENT REPORT
+
+Ako po ay nakakaranas ng cybercrime mula sa sumusunod:
+
+DETALYE:
+Numero ng Suspek: ${num}
+Carrier: ${detectCarrier(num)}
+Uri ng Krimen: ${type}
+Petsa ng Insidente: ${new Date().toLocaleDateString('tl-PH')}
+
+PALIWANAG:
+${desc}
+
+Hinihiling ko po ang inyong tulong para matigil ang aktibidad ng numerong ito at maprotektahan ang iba pang mamamayan.
+
+Gumagalang,
+[Inyong Buong Pangalan]
+[Address]
+[Contact Number]
+[Email]`
+  },
+  {
+    id:'sec', name:'SEC', full:'Securities and Exchange Commission',
+    color:'#22d9a0', emoji:'💰',
+    bg:'rgba(34,217,160,0.08)',
+    contact:'(02) 8818-0921',
+    email:'mis@sec.gov.ph',
+    url:'https://www.sec.gov.ph',
+    reportUrl:'https://www.sec.gov.ph/division/enforcement-and-investor-protection-department/',
+    desc:'Para sa fake investments, pyramiding, at Ponzi schemes.',
+    letter:(num,type,desc)=>`Petsa: ${new Date().toLocaleDateString('tl-PH')}
+
+Securities and Exchange Commission
+Pinatubo cor. Mindanao Ave, Quezon City
+
+INVESTMENT FRAUD COMPLAINT
+
+Ako po ay nakatanggap ng alok ng ${type} mula sa numero na ${num}.
+
+DETALYE:
+Numero: ${num}
+Carrier: ${detectCarrier(num)}
+Uri ng Scam: ${type}
+
+PAGLALARAWAN:
+${desc}
+
+Hinihiling ko po ang imbestigasyon at agarang aksyon laban sa entidad na ito para maprotektahan ang mga mamamayan.
+
+Taos-pusong nagpapasalamat,
+[Inyong Buong Pangalan]
+[Address]
+[Contact Number]
+[Email]`
+  },
+  {
+    id:'cic', name:'CIC', full:'Credit Information Corporation',
+    color:'#ffd166', emoji:'🏦',
+    bg:'rgba(255,209,102,0.08)',
+    contact:'(02) 8633-0261',
+    email:'feedback@cic.gov.ph',
+    url:'https://www.cic.gov.ph',
+    reportUrl:'https://www.cic.gov.ph/contact-us/',
+    desc:'Para sa illegal lending, harassment ng collectors, at loan scams.',
+    letter:(num,type,desc)=>`Petsa: ${new Date().toLocaleDateString('tl-PH')}
+
+Credit Information Corporation
+6/F, 139 Corporate Center, Valero St., Salcedo Village, Makati City
+
+HARASSMENT / ILLEGAL LENDING COMPLAINT
+
+Ako po ay nang-aabuso at pina-harass ng isang numero na kaugnay ng illegal na pagpapautang.
+
+DETALYE:
+Numero: ${num}
+Carrier: ${detectCarrier(num)}
+Uri ng Paglabag: ${type}
+
+PANGYAYARI:
+${desc}
+
+Humihiling po ako ng agarang imbestigasyon at proteksyon para sa mga consumer laban sa ganitong uri ng pang-aabuso.
+
+Gumagalang,
+[Inyong Buong Pangalan]
+[Address]
+[Contact Number]
+[Email]`
+  },
+  {
+    id:'globe', name:'Globe', full:'Globe Telecom (Report Spam/Scam)',
+    color:'#3d9bff', emoji:'📱',
+    bg:'rgba(61,155,255,0.08)',
+    contact:'2332 (libre sa Globe)',
+    email:'globe_protects@globe.com.ph',
+    url:'https://www.globe.com.ph',
+    reportUrl:'https://www.globe.com.ph/help/report-spam.html',
+    desc:'Para sa Globe numbers na nag-eespam o nag-scam.',
+    letter:(num,type,desc)=>`Para mag-report ng scam/spam number sa Globe:
+
+1. I-text: REPORT [numero] sa 2332
+   Halimbawa: REPORT 09171234567
+
+2. O mag-email sa: globe_protects@globe.com.ph
+
+3. I-block ang numero sa iyong phone settings
+
+DETALYE NG REPORT:
+Numero: ${num}
+Uri: ${type}
+Paliwanag: ${desc}
+
+Makakatulong din ang pag-forward ng scam/spam message sa 7726 (SPAM) - libreng serbisyo ito ng Globe.`
+  },
+  {
+    id:'smart', name:'Smart/PLDT', full:'Smart Communications / PLDT',
+    color:'#ff8c42', emoji:'📶',
+    bg:'rgba(255,140,66,0.08)',
+    contact:'333 (libre sa Smart)',
+    email:'spamreport@smart.com.ph',
+    url:'https://smart.com.ph',
+    reportUrl:'https://smart.com.ph/Postpaid/help-and-support/cybersafety',
+    desc:'Para sa Smart/TNT/PLDT numbers na nag-eespam o nag-scam.',
+    letter:(num,type,desc)=>`Para mag-report ng scam/spam number sa Smart:
+
+1. I-text: REPORT [numero] sa 333
+   Halimbawa: REPORT 09991234567
+
+2. O mag-email sa: spamreport@smart.com.ph
+
+3. I-forward ang scam message sa 7726
+
+DETALYE NG REPORT:
+Numero: ${num}
+Uri: ${type}
+Paliwanag: ${desc}
+
+Para sa PLDT landline concerns, tawagan ang 171 o mag-email sa 171@pldt.com.ph`
+  },
+];
+
+let currentAgencyNum = '';
+let currentAgencyDesc = '';
+let currentAgencyType = '';
+
+function renderAgencies() {
+  const grid = document.getElementById('agencyGrid');
+  grid.innerHTML = AGENCIES.map(a => `
+    <div class="agency-card">
+      <div class="agency-head" onclick="toggleAgency('${a.id}')">
+        <div class="agency-logo" style="background:${a.bg}; font-size:22px">${a.emoji}</div>
+        <div class="agency-info">
+          <div class="agency-name" style="color:${a.color}">${a.name}</div>
+          <div class="agency-desc">${a.desc}</div>
+        </div>
+        <div class="agency-toggle" id="toggle-${a.id}">▼</div>
+      </div>
+      <div class="agency-body" id="body-${a.id}">
+        <div class="agency-field">
+          <div class="field-label">Hotline</div>
+          <div class="field-val">
+            <span>${a.contact}</span>
+            <button class="copy-btn" onclick="copyText('${a.contact}')">KOPYAHIN</button>
+          </div>
+        </div>
+        <div class="agency-field">
+          <div class="field-label">Email</div>
+          <div class="field-val">
+            <span style="font-size:12px">${a.email}</span>
+            <button class="copy-btn" onclick="copyText('${a.email}')">KOPYAHIN</button>
+          </div>
+        </div>
+        <div class="action-btns">
+          <button class="action-btn btn-primary" onclick="genLetter('${a.id}')">📝 Gumawa ng Complaint Letter</button>
+          <a class="action-btn btn-secondary" href="${a.reportUrl}" target="_blank">🌐 Pumunta sa Website</a>
+          <a class="action-btn btn-blue" href="tel:${a.contact.replace(/[^0-9]/g,'')}" >📞 Tumawag</a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleAgency(id) {
+  const body = document.getElementById('body-'+id);
+  const tog = document.getElementById('toggle-'+id);
+  const open = body.classList.contains('open');
+  document.querySelectorAll('.agency-body').forEach(b=>b.classList.remove('open'));
+  document.querySelectorAll('.agency-toggle').forEach(t=>t.classList.remove('open'));
+  if(!open){ body.classList.add('open'); tog.classList.add('open'); }
+}
+
+function genLetter(agencyId) {
+  const agency = AGENCIES.find(a=>a.id===agencyId);
+  if(!agency) return;
+
+  const num = currentSearchNum || prompt('Ilagay ang numero ng suspek:') || '09XXXXXXXXX';
+  const type = currentAgencyType || 'Scam/Spam';
+  const desc = currentAgencyDesc || 'Nakatanggap ng suspicious na tawag/text mula sa numerong ito.';
+
+  const letter = agency.letter(num, type, desc);
+  document.getElementById('modalTitle').textContent = `${agency.name} — Complaint Letter`;
+  document.getElementById('letterContent').textContent = letter;
+  document.getElementById('letterModal').classList.add('show');
+}
+
+function closeModal() { document.getElementById('letterModal').classList.remove('show'); }
+function copyLetter() {
+  const txt = document.getElementById('letterContent').textContent;
+  navigator.clipboard.writeText(txt).then(()=>toast('✅ Na-copy ang letter!','success'));
+}
+
+// ═══════════════════════════════════════════════════════
+// DATABASE VIEW
+// ═══════════════════════════════════════════════════════
+const typeLabels = {scam:'🚨 SCAM',spam:'📢 SPAM',harassment:'😡 PANGGUGULO',impersonation:'🎭 PANLOLOKO',investment:'💸 FAKE INVEST',safe:'✅ LIGTAS',unknown:'❓ UNKNOWN'};
+const typeColors = {scam:'risk-scam',spam:'risk-spam',harassment:'risk-scam',impersonation:'risk-scam',investment:'risk-scam',safe:'risk-safe',unknown:'risk-unknown'};
+const iconTypes = {scam:'scam',spam:'spam',harassment:'scam',impersonation:'scam',investment:'scam',safe:'safe',unknown:'unknown'};
+
+function renderDB(filter) {
+  let data = getDB();
+  if(filter!=='all') data = data.filter(d=>d.type===filter);
+  
+  // Deduplicate by num
+  const seen = {};
+  const deduped = [];
+  data.forEach(d => {
+    if(!seen[d.num]) { seen[d.num] = { ...d, count: 1 }; deduped.push(seen[d.num]); }
+    else seen[d.num].count++;
+  });
+  deduped.sort((a,b)=>b.count-a.count);
+
+  const list = document.getElementById('dbList');
+  if(deduped.length===0){ list.innerHTML='<div class="no-reports" style="padding:40px">Walang entry para sa kategoryang ito.</div>'; return; }
+
+  list.innerHTML = deduped.map(d=>`
+    <div class="db-item" onclick="searchFromDB('${d.num}')">
+      <div class="db-icon ${iconTypes[d.type]||'unknown'}">${typeLabels[d.type]?.charAt(0)||'❓'}</div>
+      <div class="db-info">
+        <div class="db-num">${d.num}</div>
+        <div class="db-detail">${d.carrier} · ${d.region}</div>
+        <div class="db-count">${d.count} report${d.count>1?'s':''} · ${d.date}</div>
+      </div>
+      <div class="db-badge ${typeColors[d.type]||'risk-unknown'}">${typeLabels[d.type]||'UNKNOWN'}</div>
+    </div>
+  `).join('');
+}
+
+function filterDB(filter, btn) {
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  renderDB(filter);
+}
+
+function searchFromDB(num) {
+  document.getElementById('homeSearch').value = num;
+  goPage('home', document.querySelectorAll('.nav-btn')[0]);
+  doSearch();
+}
+
+// ═══════════════════════════════════════════════════════
+// HOME STATS + RECENT
+// ═══════════════════════════════════════════════════════
+function updateStats() {
+  const db = getDB();
+  document.getElementById('statTotal').textContent = db.length;
+  document.getElementById('statScam').textContent = db.filter(d=>['scam','impersonation','investment','harassment'].includes(d.type)).length;
+  document.getElementById('statSafe').textContent = db.filter(d=>d.type==='safe').length;
+}
+
+function renderRecent() {
+  const db = getDB();
+  const recent = [...db].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);
+  document.getElementById('recentList').innerHTML = recent.map(d=>`
+    <div class="db-item" onclick="searchFromDB('${d.num}')">
+      <div class="db-icon ${iconTypes[d.type]||'unknown'}">${['scam','spam','harassment'].includes(d.type)?'⚠️':d.type==='safe'?'✅':'❓'}</div>
+      <div class="db-info">
+        <div class="db-num">${d.num}</div>
+        <div class="db-detail">${d.desc.slice(0,55)}${d.desc.length>55?'...':''}</div>
+        <div class="db-count">${d.carrier} · ${d.region} · ${d.date}</div>
+      </div>
+      <div class="db-badge ${typeColors[d.type]||'risk-unknown'}" style="font-size:10px">${typeLabels[d.type]||'?'}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════
+function toast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+function copyText(txt) {
+  navigator.clipboard.writeText(txt).then(()=>toast('✅ Na-copy!','success'));
+}
+
+// Enter key on search
+document.getElementById('homeSearch').addEventListener('keydown', e=>{ if(e.key==='Enter') doSearch(); });
+
+// ═══════════════════════════════════════════════════════
+// PWA INSTALL
+// ═══════════════════════════════════════════════════════
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'flex';
+});
+
+function triggerInstall() {
+  if(deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; hideBanner(); });
+  } else {
+    toast('I-open sa browser at piliin ang "Add to Home Screen"','info');
+  }
+}
+
+function hideBanner() { document.getElementById('installBanner').style.display='none'; }
+
+// Service Worker
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+
+// ═══════════════════════════════════════════════════════
+// REGISTRATION
+// ═══════════════════════════════════════════════════════
+const REG_KEY = 'scamshield_user_v1';
+let selectedIDType = '';
+
+function checkRegistration() {
+  try {
+    const user = localStorage.getItem(REG_KEY);
+    if(user) {
+      document.getElementById('regScreen').classList.add('hidden');
+      updateHeaderUser(JSON.parse(user));
+    }
+  } catch(e) {
+    document.getElementById('regScreen').classList.add('hidden');
+  }
+}
+
+function updateHeaderUser(user) {
+  const badge = document.querySelector('.header-badge');
+  if(badge && user) badge.textContent = user.name.split(' ')[0].toUpperCase();
+}
+
+function goRegStep(n) {
+  document.querySelectorAll('.reg-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step'+n).classList.add('active');
+  document.querySelectorAll('.step-dot').forEach((d,i)=>{
+    d.classList.remove('active','done');
+    if(i+1===n) d.classList.add('active');
+    else if(i+1<n) d.classList.add('done');
+  });
+  document.getElementById('regScreen').scrollTop=0;
+}
+
+function regStep1() {
+  const name = document.getElementById('regName').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
+  if(!name){ toast('⚠️ Ilagay ang iyong pangalan','error'); return; }
+  if(!phone||phone.length<10){ toast('⚠️ Ilagay ang tamang contact number','error'); return; }
+  goRegStep(2);
+}
+
+function selectID(el, type) {
+  document.querySelectorAll('.id-type-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedIDType = type;
+  document.getElementById('selectedIDLabel').textContent = type;
+}
+
+function regStep2() {
+  if(!selectedIDType){ toast('⚠️ Pumili ng uri ng ID','error'); return; }
+  document.getElementById('step3IDType').textContent = selectedIDType;
+  goRegStep(3);
+}
+
+function previewID(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 5*1024*1024){ toast('⚠️ Masyadong malaki ang file. Max 5MB.','error'); return; }
+  const area = document.getElementById('uploadArea');
+  const preview = document.getElementById('uploadPreview');
+  const fname = document.getElementById('uploadFilename');
+  const inner = document.getElementById('uploadInner');
+  area.classList.add('has-file');
+  inner.style.display='none';
+  preview.style.display='block';
+  fname.style.display='block';
+  fname.textContent='✅ '+file.name;
+  const reader = new FileReader();
+  reader.onload = ev => { preview.src = ev.target.result; };
+  reader.readAsDataURL(file);
+}
+
+function regStep3() {
+  const file = document.getElementById('idFile').files[0];
+  if(!file){ toast('⚠️ I-upload muna ang iyong ID','error'); return; }
+  const name = document.getElementById('regName').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const user = { name, phone, email, idType: selectedIDType, regDate: new Date().toLocaleDateString('tl-PH') };
+  try { localStorage.setItem(REG_KEY, JSON.stringify(user)); } catch(e) {}
+  // Show success
+  document.querySelectorAll('.reg-step').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.step-dot').forEach(d=>{ d.classList.remove('active'); d.classList.add('done'); });
+  document.getElementById('userSummary').innerHTML = `
+    <div class="user-card-row"><div class="user-card-label">Pangalan</div><div class="user-card-val">${name}</div></div>
+    <div class="user-card-row"><div class="user-card-label">Contact</div><div class="user-card-val">${phone}</div></div>
+    <div class="user-card-row"><div class="user-card-label">Valid ID</div><div class="user-card-val">${selectedIDType}</div></div>
+    <div class="user-card-row"><div class="user-card-label">Petsa</div><div class="user-card-val">${user.regDate}</div></div>
+  `;
+  document.getElementById('regSuccess').classList.add('show');
+}
+
+function enterApp() {
+  const user = JSON.parse(localStorage.getItem(REG_KEY)||'{}');
+  document.getElementById('regScreen').classList.add('hidden');
+  updateHeaderUser(user);
+  toast('Maligayang pagdating, '+user.name.split(' ')[0]+'! 🛡️','success');
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+updateStats();
+renderRecent();
+checkRegistration();
+</script>
+</body>
+</html>
